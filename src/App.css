@@ -1,0 +1,30 @@
+.heading{
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.center {
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+  }
+
+  .sticky {
+    position: sticky;
+    bottom: 0;
+    display: flex;
+  justify-content: center;
+  align-items: center;
+  }
+  .bord {
+    border-width: 10px;
+  }
+  .bgd{
+    background-color: grey;
+  }
+   .playhover:hover{
+    opacity: 0.8;
+  }
