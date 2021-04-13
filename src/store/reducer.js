@@ -11,12 +11,12 @@ const reducer = (state = initialState, action) => {
     case "PLAY":
       return {
         ...state,
-        playerState: true,
+        playerState: action.payload
       };
     case "PAUSE":
       return {
         ...state,
-        playerState: false,
+        playerState: action.payload
       };
     case "CHANGE":
       return {

@@ -1,14 +1,15 @@
-export function play() {
+export function play(type, arg) {
   return {
-    type: "PLAY",
+    type: type,
+    payload: arg
   };
 }
 
-export function pause() {
-  return {
-    type: "PAUSE",
-  };
-}
+// export function pause() {
+//   return {
+//     type: "PAUSE",
+//   };
+// }
 
 export function music(exp) {
 

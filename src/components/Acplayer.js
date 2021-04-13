@@ -1,36 +1,36 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import "../App.css";
 import { ProgressBar } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { play, pause, duration, playing, mute } from "../store/action";
+import { play, duration, playing, mute } from "../store/action";
 
 const Acplayer = ({ music }) => {
-  //const [duration, setDuration] = useState(0);
-  // const [playerState,setPlayerState]=useState('pause') // play
-  //const [playingTime, setPlayingTime] = useState(0);
-  //const [muted, setMuted] = useState(false);
+
   const playerState = useSelector((state) => state.playerState);
   const durationState = useSelector(state => state.duration);
   const dispatch = useDispatch();
   const playingState = useSelector(state => state.playingTime);
   const muteState = useSelector(state => state.muted);
-
+console.log(playerState)
+console.log(muteState)
+console.log("hello")
 
   const inputRef = useRef(null);
 
   useEffect(() => {
     if (music) {
-      dispatch(play());
+      dispatch(play("PLAY", true));
       inputRef.current.play();
     }
-  }, [music]);
+    console.log("render")
+  }, [music, dispatch]);
 
   const handleOnClick = () => {
     if (playerState) {
-      dispatch(pause());
+      dispatch(play("PAUSE", false));
       inputRef.current.pause();
     } else {
-      dispatch(play());
+      dispatch(play("PLAY", true));
       inputRef.current.play();
     }
   };
@@ -76,7 +76,7 @@ const Acplayer = ({ music }) => {
                 dispatch(playing(curTime))
               }}
               onEnded={() => {
-                dispatch(pause());
+                dispatch(play("PAUSE", false));
               }}
               type="audio/mp3"
               style={{ display: "none", width: "0px", height: "0px" }}

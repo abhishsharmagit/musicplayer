@@ -1,10 +1,13 @@
 import React from 'react'
 import "../App.css"
+import { music } from "../store/action";
+import { useDispatch } from "react-redux";
 
 
-const Card = ({title, img, music, musicChange}) => {
 
- 
+const Card = ({title, img, music: Musics}) => {
+
+  const dispatch = useDispatch()
   
     return (
         <div className="container playhover">
@@ -13,7 +16,7 @@ const Card = ({title, img, music, musicChange}) => {
         <img className="card-img-top" src={img} alt="Card images" />
           <div className="card-body center">
             {/* <h4 className="card-title"></h4> */}
-            <a href="#" className="btn btn-outline-success center-block stretched-link" onClick = {()=>musicChange(music)}>{title}</a>
+            <a href="#" className="btn btn-outline-success center-block stretched-link" onClick = {()=>dispatch(music(Musics))}>{title}</a>
          
           </div>
         

@@ -1,9 +1,9 @@
 import Card from "./Card";
-import React, { useState } from "react";
+import React from "react";
 import "../App.css";
 import Acplayer from "./Acplayer";
-import { music } from "../store/action";
-import { useSelector, useDispatch } from "react-redux";
+
+import { useSelector} from "react-redux";
 
 const Player = () => {
   const lists = [
@@ -44,14 +44,9 @@ const Player = () => {
       music: "/assets/music/sample1.mp3",
     },
   ];
-  // const inputRef = useRef("audio_tag");
-  //const [music, setMusic] = useState();
-  const musicState = useSelector((state) => state.musicState);
-  const dispatch = useDispatch();
 
-  const handleMusic = (mus) => {
-    dispatch(music(mus));
-  };
+  const musicState = useSelector((state) => state.musicState);
+
 
 
   return (
@@ -67,7 +62,7 @@ const Player = () => {
                 title={data.title}
                 img={data.img}
                 music={data.music}
-                musicChange={handleMusic}
+                
               />
             </div>
           );
