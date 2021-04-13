@@ -4,17 +4,7 @@ import "../App.css"
 
 const Card = ({title, img, music, musicChange}) => {
 
-    // const [photo, setPhoto] = useState();
-
-    // useEffect(()=>{
-    //     axios.get("https://source.unsplash.com/music")
-    //     .then((result) => {
-    //         result.json();
-    //     })
-    //     .then((data) => {
-
-    //     })
-    // })
+ 
   
     return (
         <div className="container playhover">

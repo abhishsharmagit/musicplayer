@@ -1,111 +1,118 @@
-import React, { useState, useEffect, useRef } from 'react'
-import "../App.css"
-import {ProgressBar} from "react-bootstrap"
+import React, { useState, useEffect, useRef } from "react";
+import "../App.css";
+import { ProgressBar } from "react-bootstrap";
+import { useSelector, useDispatch } from "react-redux";
+import { play, pause, duration, playing, mute } from "../store/action";
+
+const Acplayer = ({ music }) => {
+  //const [duration, setDuration] = useState(0);
+  // const [playerState,setPlayerState]=useState('pause') // play
+  //const [playingTime, setPlayingTime] = useState(0);
+  //const [muted, setMuted] = useState(false);
+  const playerState = useSelector((state) => state.playerState);
+  const durationState = useSelector(state => state.duration);
+  const dispatch = useDispatch();
+  const playingState = useSelector(state => state.playingTime);
+  const muteState = useSelector(state => state.muted);
 
 
-const Acplayer = ({music}) => {
+  const inputRef = useRef(null);
 
-    const [duration, setDuration] = useState(0)
-    const [playerState,setPlayerState]=useState('pause') // play
-    const [playingTime, setPlayingTime] = useState(0)
-    const[muteIcon, setMuteIcon] = useState('notmute')
- 
-  
-    const inputRef = useRef(null)
-
-    // canplay
-    // playing
-    // paused
-    // onmetadataloaded
-    
-   useEffect(()=>{
-    if(music){
-        inputRef.current.play();
-       
-        setPlayerState('play')
-       
-        console.log("render")
+  useEffect(() => {
+    if (music) {
+      dispatch(play());
+      inputRef.current.play();
     }
-   }, [music])
+  }, [music]);
 
-
-    const handleIcon = () => {
-      
-       if(playerState=='pause'){
-            setPlayerState("play")
-            inputRef.current.play();
-       }
-       else{
-            setPlayerState("pause")
-            inputRef.current.pause()
-       }
-      
+  const handleOnClick = () => {
+    if (playerState) {
+      dispatch(pause());
+      inputRef.current.pause();
+    } else {
+      dispatch(play());
+      inputRef.current.play();
     }
+  };
 
-    const handleMuteIcon = (i) =>{
-        if(muteIcon == "notmute"){
-                setMuteIcon("mute")
-                inputRef.current.muted = true
-        }else{
-            setMuteIcon("notmute")
-            inputRef.current.muted = false
-        }
+  const handleMuteIcon = (i) => {
+    if (muteState == false) {
+      dispatch(mute(true))
+      inputRef.current.muted = true;
+    } else {
+      dispatch(mute(false));
+      inputRef.current.muted = false;
     }
-    const fmtMSS = (s) => {return(s-(s%=60))/60+(9<s?':':':0')+s}
-  
-    // useEffect(() => {
-    //     if(inputRef){
-    //         inputRef.current
-    //     }
-    //     return () => {
-    //         inputRef.current.remo
-    //     }
-    // }, [])
+  };
+  const fmtMSS = (s) => {
+    return (s - (s %= 60)) / 60 + (9 < s ? ":" : ":0") + s;
+  };
 
-    const formattedDuration = fmtMSS(duration)
-    const formattedTime = fmtMSS(playingTime)
+  const formattedDuration = fmtMSS(durationState);
+  const formattedTime = fmtMSS(playingState);
 
-    return (
-        <div className = "container bgd">
-            <div className="row border border-5 border-primary rounded">
-                <div className = "col-1">
-                <i className={playerState=='pause'?"bi bi-play-circle":'bi bi-pause-circle'} onClick = {()=>{handleIcon() }}> </i>
-                <div className = "sticky">
-                    <audio ref = {inputRef} src={music} controls 
-                   onLoadedMetadata={(e) => {
-                   setDuration(parseInt(e.target.duration))
-                 
-                }
-                        } 
-                     onTimeUpdate={e =>{
-                         var curTime = parseInt(inputRef.current.currentTime);
-                         setPlayingTime(curTime);
+  return (
+    <div className="container bgd">
+      <div className="row border border-5 border-primary rounded">
+        <div className="col-1">
+          <i
+            className={playerState ? "bi bi-pause-circle" : "bi bi-play-circle"}
+            onClick={handleOnClick}
+          >
+            {" "}
+          </i>
+          <div className="sticky">
+            <audio
+              ref={inputRef}
+              src={music}
+              controls
+              onLoadedMetadata={(e) => {
+                const time = parseInt(e.target.duration)
+                dispatch(duration(time));
                 
-                         }} 
-                    onEnded={()=>{
-                            setPlayerState('pause');
-                        }}
-
-                        type="audio/mp3" style = {{display: "none", width: "0px", height: "0px"}}/>
-                 </div>
-               
-                </div>
-                <div className = "col-1">
-                    <div>
-                        {formattedTime}/{formattedDuration}
-                    </div>
-                </div>
-                <div className = "col-9">
-                    <div className="progressBar">
-                        <ProgressBar striped variant="success" now={playingTime/duration * 100} />
-                    </div>
-                </div>
-                <div className = "col-1">
-                    <i class={muteIcon=="notmute"?"bi bi-volume-down-fill":"bi bi-volume-mute-fill"} onClick={()=>{handleMuteIcon() }}></i>
-                </div>
-            </div>
+              }}
+              onTimeUpdate={(e) => {
+                var curTime = parseInt(inputRef.current.currentTime);
+                dispatch(playing(curTime))
+              }}
+              onEnded={() => {
+                dispatch(pause());
+              }}
+              type="audio/mp3"
+              style={{ display: "none", width: "0px", height: "0px" }}
+            />
+          </div>
         </div>
-    )
-}
+        <div className="col-1">
+          <div>
+            {formattedTime}/{formattedDuration}
+          </div>
+        </div>
+        <div className="col-9">
+          <div className="progressBar">
+            <ProgressBar
+              striped
+              variant="success"
+              now={(playingState / durationState) * 100}
+            />
 
-export default Acplayer
+          </div>
+        </div>
+        <div className="col-1">
+          <i
+            class={
+              muteState == false
+                ? "bi bi-volume-down-fill"
+                : "bi bi-volume-mute-fill"
+            }
+            onClick={() => {
+              handleMuteIcon();
+            }}
+          ></i>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Acplayer;
