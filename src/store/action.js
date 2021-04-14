@@ -39,6 +39,6 @@ export function mute(arg) {
 
   return {
     type: "MUTE",
-    payload: arg,
+    payload: arg
   };
 }
