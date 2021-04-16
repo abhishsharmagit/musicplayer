@@ -3,9 +3,13 @@ import "../App.css"
 import { music } from "../store/action";
 import { useDispatch } from "react-redux";
 
+type AppProps = {
+  title: string,
+  img: string,
+  music: string
+}
 
-
-const Card = ({title, img, music: Musics}) => {
+const Card: React.FunctionComponent<AppProps> = ({title, img, music: Musics}) => {
 
   const dispatch = useDispatch()
   

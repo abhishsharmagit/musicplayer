@@ -1,4 +1,5 @@
-const initialState = {
+
+const initialState: stateFormat = {
   playerState: false,
   musicState: "",
   duration: 0,
@@ -6,7 +7,7 @@ const initialState = {
   muted: false,
 };
 
-const reducer = (state = initialState, action) => {
+const reducer = (state = initialState, action:Action) => {
   switch (action.type) {
     case "PLAY":
       return {

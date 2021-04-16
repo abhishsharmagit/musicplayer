@@ -45,8 +45,9 @@ const Player = () => {
     },
   ];
 
-  const musicState = useSelector((state) => state.musicState);
+  const musicState = useSelector((state:stateFormat) => state.musicState);
 
+ 
 
 
   return (

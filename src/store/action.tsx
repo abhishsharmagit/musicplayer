@@ -1,4 +1,11 @@
-export function play(type, arg) {
+
+// type Action = {
+//   type: String,
+//   arg?: any 
+// }
+
+
+export function play(type: String, arg?:any): Action{
   return {
     type: type,
     payload: arg
@@ -11,7 +18,7 @@ export function play(type, arg) {
 //   };
 // }
 
-export function music(exp) {
+export function music(exp?:any):Action{
 
   return {
     type: "CHANGE",
@@ -19,7 +26,7 @@ export function music(exp) {
   };
 }
 
-export function duration(dur) {
+export function duration(dur?:number):Action {
 
   return {
     type: "NEW_DURATION",
@@ -27,7 +34,7 @@ export function duration(dur) {
   };
 }
 
-export function playing(dur) {
+export function playing(dur?:number):Action {
 
   return {
     type: "TIME_CHANGE",
@@ -35,7 +42,7 @@ export function playing(dur) {
   };
 }
 
-export function mute(arg) {
+export function mute(arg?:any):Action {
 
   return {
     type: "MUTE",

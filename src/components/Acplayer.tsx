@@ -1,21 +1,21 @@
-import React, { useEffect, useRef } from "react";
+import React, { Dispatch, useEffect, useRef } from "react";
 import "../App.css";
 import { ProgressBar } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { play, duration, playing, mute } from "../store/action";
 
-const Acplayer = ({ music }) => {
+const Acplayer: React.FC<musicProp> = ({ music }) => {
 
-  const playerState = useSelector((state) => state.playerState);
-  const durationState = useSelector(state => state.duration);
+  const playerState = useSelector((state:stateFormat) => state.playerState);
+  const durationState = useSelector((state:stateFormat) => state.duration);
   const dispatch = useDispatch();
-  const playingState = useSelector(state => state.playingTime);
-  const muteState = useSelector(state => state.muted);
+  const playingState = useSelector((state:stateFormat) => state.playingTime);
+  const muteState = useSelector((state:stateFormat) => state.muted);
 console.log(playerState)
 console.log(muteState)
 console.log("hello")
 
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLAudioElement>(null!);
 
   useEffect(() => {
     if (music) {
@@ -35,7 +35,7 @@ console.log("hello")
     }
   };
 
-  const handleMuteIcon = (i) => {
+  const handleMuteIcon = () => {
     if (muteState == false) {
       dispatch(mute(true))
       inputRef.current.muted = true;
@@ -44,7 +44,7 @@ console.log("hello")
       inputRef.current.muted = false;
     }
   };
-  const fmtMSS = (s) => {
+  const fmtMSS = (s:number) => {
     return (s - (s %= 60)) / 60 + (9 < s ? ":" : ":0") + s;
   };
 
@@ -66,19 +66,22 @@ console.log("hello")
               ref={inputRef}
               src={music}
               controls
-              onLoadedMetadata={(e) => {
+              onLoadedMetadata={(e: any) => {
                 const time = parseInt(e.target.duration)
                 dispatch(duration(time));
                 
               }}
               onTimeUpdate={(e) => {
-                var curTime = parseInt(inputRef.current.currentTime);
-                dispatch(playing(curTime))
+                
+                const cTime = Math.ceil(inputRef.current.currentTime)
+               
+               // var curTime = (cTime);
+                dispatch(playing(cTime))
               }}
               onEnded={() => {
                 dispatch(play("PAUSE", false));
               }}
-              type="audio/mp3"
+             
               style={{ display: "none", width: "0px", height: "0px" }}
             />
           </div>
@@ -100,7 +103,7 @@ console.log("hello")
         </div>
         <div className="col-1">
           <i
-            class={
+            className={
               muteState == false
                 ? "bi bi-volume-down-fill"
                 : "bi bi-volume-mute-fill"
