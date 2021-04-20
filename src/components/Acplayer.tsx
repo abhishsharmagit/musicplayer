@@ -1,55 +1,72 @@
-import React, { Dispatch, useEffect, useRef } from "react";
+import React, { Dispatch, useEffect, useRef, useState } from "react";
 import "../App.css";
-import { ProgressBar } from "react-bootstrap";
+//import { ProgressBar } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { play, duration, playing, mute } from "../store/action";
+import Slider from "./slider/Slider"
 
 const Acplayer: React.FC<musicProp> = ({ music }) => {
 
   const playerState = useSelector((state:stateFormat) => state.playerState);
   const durationState = useSelector((state:stateFormat) => state.duration);
   const dispatch = useDispatch();
-  const playingState = useSelector((state:stateFormat) => state.playingTime);
+  const playingTimeState = useSelector((state:stateFormat) => state.playingTime);
   const muteState = useSelector((state:stateFormat) => state.muted);
-console.log(playerState)
-console.log(muteState)
-console.log("hello")
 
-  const inputRef = useRef<HTMLAudioElement>(null!);
+const [percentage, setPercentage] = useState((playingTimeState / durationState) * 100)
+  const audioRef = useRef<HTMLAudioElement>(null!);
 
   useEffect(() => {
     if (music) {
       dispatch(play("PLAY", true));
-      inputRef.current.play();
+      audioRef.current.play();
     }
-    console.log("render")
+    
   }, [music, dispatch]);
 
   const handleOnClick = () => {
     if (playerState) {
       dispatch(play("PAUSE", false));
-      inputRef.current.pause();
+      audioRef.current.pause();
     } else {
       dispatch(play("PLAY", true));
-      inputRef.current.play();
+      audioRef.current.play();
     }
   };
 
   const handleMuteIcon = () => {
     if (muteState == false) {
       dispatch(mute(true))
-      inputRef.current.muted = true;
+      audioRef.current.muted = true;
     } else {
       dispatch(mute(false));
-      inputRef.current.muted = false;
+      audioRef.current.muted = false;
     }
   };
   const fmtMSS = (s:number) => {
     return (s - (s %= 60)) / 60 + (9 < s ? ":" : ":0") + s;
   };
 
+  const onChange = (e: any) => {
+    const audio = audioRef.current
+    audio.currentTime = (audio.duration / 100) * e.target.value
+    //console.log(audio.currentTime)
+    //console.log(e.target.value)
+    setPercentage(e.target.value)
+  }
+
+  const getCurrDuration = (e:any) => {
+    const percent = ((e.currentTarget.currentTime / e.currentTarget.duration) * 100).toFixed(2)
+    //const time = e.currentTarget.currentTime
+    const cTime = Math.ceil(audioRef.current.currentTime)
+               
+     dispatch(playing(cTime))
+    setPercentage(+percent)
+    //setCurrentTime(time.toFixed(2))
+  }
+
   const formattedDuration = fmtMSS(durationState);
-  const formattedTime = fmtMSS(playingState);
+  const formattedTime = fmtMSS(playingTimeState);
 
   return (
     <div className="container bgd">
@@ -63,20 +80,17 @@ console.log("hello")
           </i>
           <div className="sticky">
             <audio
-              ref={inputRef}
+              ref={audioRef}
               src={music}
-              controls
+              
               onLoadedMetadata={(e: any) => {
                 const time = parseInt(e.target.duration)
                 dispatch(duration(time));
                 
               }}
               onTimeUpdate={(e) => {
-                
-                const cTime = Math.ceil(inputRef.current.currentTime)
-               
-               // var curTime = (cTime);
-                dispatch(playing(cTime))
+                getCurrDuration(e)
+            
               }}
               onEnded={() => {
                 dispatch(play("PAUSE", false));
@@ -92,14 +106,15 @@ console.log("hello")
           </div>
         </div>
         <div className="col-9">
-          <div className="progressBar">
+          {/* <div className="progressBar">
             <ProgressBar
               striped
               variant="success"
-              now={(playingState / durationState) * 100}
+              now={(playingTimeState / durationState) * 100}
             />
 
-          </div>
+          </div> */}
+          <Slider percentage={percentage} onChange = {onChange}/>
         </div>
         <div className="col-1">
           <i

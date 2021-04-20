@@ -19,7 +19,7 @@ const reducer = (state = initialState, action:Action) => {
         ...state,
         playerState: action.payload
       };
-    case "CHANGE":
+    case "CHANGE_MUSIC":
       return {
         ...state,
         musicState: action.payload,

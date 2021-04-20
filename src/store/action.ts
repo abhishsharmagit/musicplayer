@@ -21,7 +21,7 @@ export function play(type: String, arg?:any): Action{
 export function music(exp?:any):Action{
 
   return {
-    type: "CHANGE",
+    type: "CHANGE_MUSIC",
     payload: exp,
   };
 }
