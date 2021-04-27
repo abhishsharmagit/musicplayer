@@ -17,3 +17,7 @@ type Action = {
   type musicProp = {
       music: string
   }
+
+  type PlayerProps = {
+    code: string|null
+}

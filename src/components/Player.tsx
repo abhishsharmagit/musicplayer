@@ -2,10 +2,15 @@ import Card from "./Card";
 import React from "react";
 import "../App.css";
 import Acplayer from "./Acplayer";
+import useAuth from "./useAuth"
 
 import { useSelector} from "react-redux";
+import Dashboard from "./Dashboard";
 
 const Player = () => {
+
+   //const accessToken = useAuth(code)
+
   const lists = [
     {
       id: 1,
@@ -54,16 +59,18 @@ const Player = () => {
   const musicState = useSelector((state:stateFormat) => state.musicState);
 
  
-
+console.log(musicState)
 
   return (
     <div className="container-fluid">
       <div className="row justify-content-md-center">
         <h1 className="text-center">Music Player</h1>
       </div>
+     
       <div className="row">
         {lists.map((data) => {
           return (
+            
             <div className="col justify-content-md-center">
               <Card
                 title={data.title}

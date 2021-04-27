@@ -20,6 +20,7 @@ const [percentage, setPercentage] = useState((playingTimeState / durationState) 
     if (music) {
       dispatch(play("PLAY", true));
       audioRef.current.play();
+      console.log(music)
     }
     
   }, [music, dispatch]);

@@ -16,7 +16,7 @@ const Slider: React.FC<Prop> = ({ percentage = 0, onChange }) => {
     setPosition(percentage)
     
   }, [percentage])
-  console.log(position)
+
  //const pos = inputRef.current.value = 0
 
   return (
