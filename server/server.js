@@ -123,7 +123,7 @@ const getSearch = async (search) => {
                 limit: 10
               }
     });
-    console.log("hello")
+    
     if (response.status === 200) {
       
       //return JSON.stringify(response.data);
@@ -135,31 +135,36 @@ const getSearch = async (search) => {
   }
 };
 
-// const getNewRelease = async () => {
-//   try {
-//     const response = await axios({
-//       method: "GET",
-//       url: "https://api.spotify.com/v1/browse/new-releases",
-//       headers: {
-//         Authorization: `Bearer ${access_token}`,
-//         "Access-Control-Allow-Origin": "*",
-//       },
-//       params: {
-//         country: "IN",
-//         limit: 50,
-//       },
-//     });
-//     if (response.status === 200) {
-//       return response.data;
-//     }
-//   } catch (error) {
-//     return error;
-//   }
-// };
+const getNewSongs = async () => {
+  try {
+    console.log("2")
+    const response = await axios({
+      method: "GET",
+      url: "https://api.spotify.com/v1/search",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Access-Control-Allow-Origin": "*",
+      },
+      params: {
+        q: `billie ellish`,
+        type: `track`,
+        market: "IN",
+        limit: 10
+      }
+    });
+    if (response.status === 200) {
+      console.log(response.data)
+      return response.data;
+    }
+  } catch (error) {
+    return error;
+  }
+};
 
-// app.get("/health", function (req, res) {
-//   res.send("Health Checkup Is Working");
-// });
+app.get("/newsongs",async function (req, res) {
+  console.log(1)
+  res.send(await getNewSongs());
+});
 
 // app.get("/login", function (req, res) {
 //   return res.send(
@@ -168,33 +173,20 @@ const getSearch = async (search) => {
 // });
 
 app.post("/search", async function (req, res) {
-  console.log("hi")
+
   let {search} = req.body
-  console.log(search)
+
   const searchResult = await getSearch(search);
-  //const ok = JSON.stringify(searchResult)
+ 
   res.send(searchResult);
 });
 
 app.post("/login", async function (req, res) {
-  // let code = req.query.code || null;
+
  
     let {code} = req.body
-  //console.log(code)
-  //var code = "x"
-  //if (code === null) res.redirect("/error");
-
   const tokens = await generateToken(code);
-  // res.cookie("access-token", access_token);
-  // res.cookie("refresh-token", refresh_token);
-  // if (tokens) {
-  //   const response = await getMe();
-  //   if (response.data) {
-  //     res.cookie("user", response.data);
-  //   }
-  //  // res.send("<script>window.close()</script>");
-  // }
-  
+
   res.json({
             accessToken: tokens.access_token,
             refreshToken:tokens.refresh_token,
@@ -205,5 +197,5 @@ app.post("/login", async function (req, res) {
 });
 
 app.listen(PORT, () => {
-  console.log(`Serve is up and running at the port ${PORT}`);
+  console.log(`Server is up and running at the port ${PORT}`);
 });

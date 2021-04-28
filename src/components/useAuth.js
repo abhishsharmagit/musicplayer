@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
+import {music} from "../store/action"
+import {useDispatch} from "react-redux"
 
 export default function useAuth(code) {
   const [accessToken, setAccessToken] = useState()
@@ -8,7 +10,7 @@ export default function useAuth(code) {
   const grant_type = "authorization_code"
   const redirect_uri = "http://localhost:3000"
 
-
+  const dispatch = useDispatch();
   
 
   useEffect(() => {
@@ -27,6 +29,31 @@ export default function useAuth(code) {
         console.log(e.message)
       })
   }, [code])
+
+
+  useEffect(()=>{
+    axios.get("http://localhost:3001/newsongs")
+    .then((res)=>{
+      console.log(res)
+      dispatch(music( 
+        //@ts-ignore
+      res.data.tracks.items.map(track =>{
+  
+       
+        return {
+         
+           artist: track.artists[0].name,
+            title: track.name,
+            uri: track.preview_url,
+            cardimg: track.album.images[1].url
+        }
+        
+      })
+      ))
+    }).catch((e)=>{
+      console.log(e.message)
+    })
+   },[])
 
   useEffect(() => {
     if (!refreshToken || !expiresIn) return

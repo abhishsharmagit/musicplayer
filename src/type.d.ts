@@ -1,9 +1,14 @@
 type stateFormat = {
     playerState: boolean,
-    musicState: string,
+    musicState: Array,
     duration: number,
     playingTime: number,
-    muted: boolean
+    muted: boolean,
+    search: string,
+    searchResults: string|object[],
+    albumurl: string,
+    title: string,
+    song: string
   }
 
 
@@ -15,9 +20,10 @@ type Action = {
 
 
   type musicProp = {
-      music: string
+      song: string
   }
 
   type PlayerProps = {
     code: string|null
 }
+

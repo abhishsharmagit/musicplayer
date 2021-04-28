@@ -5,7 +5,7 @@ import TrackSearchResult from "./TrackSearchResult"
 import SpotifyWebApi from "spotify-web-api-node"
 import Player from "./Player"
 import { useSelector, useDispatch } from "react-redux";
-import { music } from "../store/action";
+import { music, searchAction, searchResultsAction, albumUrlAction, titleAction, songAction } from "../store/action";
 import axios from "axios"
 
 
@@ -19,18 +19,26 @@ const spotifyApi = new SpotifyWebApi({
 const Dashboard = ({code}) => {
   const accessToken = useAuth(code);
   console.log(accessToken)
-  const [search, setSearch] = useState("")
-  const [searchResults, setSearchResults] = useState([])
+  // const [search, setSearch] = useState("")
+  // const [searchResults, setSearchResults] = useState([])
  // const [playingTrack, setPlayingTrack] = useState()
   const dispatch = useDispatch();
-  const musicState = useSelector((state) => state.musicState);
+  
+  const search = useSelector((state) => state.search)
+  const searchResults = useSelector((state) => state.searchResults)
+  const title = useSelector((state) => state.title)
+
+
 
 
 
  // console.log(playingTrack)
   function chooseTrack(track) {
-    dispatch(music(track.uri))
-    setSearch("")
+    dispatch(songAction(track.uri))
+    dispatch(albumUrlAction(track.albumUrl))
+    dispatch(titleAction(track.title))
+    dispatch(searchAction(""))
+    dispatch(searchResultsAction([]))
     
   }
 
@@ -40,7 +48,7 @@ const Dashboard = ({code}) => {
   }, [accessToken])
 
   useEffect(() => {
-    if (!search) return setSearchResults([])
+    if (!search) return dispatch(searchResultsAction([]))
     if (!accessToken) return
 
     let cancel = false
@@ -72,14 +80,33 @@ const Dashboard = ({code}) => {
         search
       })
         .then(res => {
-          console.log(1)
-         
-         //const resp = JSON.parse(res);
-          console.log(res)
+
+          if (cancel) return
+           
+           dispatch(searchResultsAction(
+              
+              res.data.tracks.items.map(track => {
+                const smallestAlbumImage = track.album.images.reduce(
+                  (smallest, image) => {
+                    if (image.height < smallest.height) return image
+                    return smallest
+                  },
+                  track.album.images[0]
+                )
+      
+                return {
+                  artist: track.artists[0].name,
+                  title: track.name,
+                  uri: track.preview_url,
+                  albumUrl: smallestAlbumImage.url,
+                }
+              })
+        
+           ))
         })
         .catch((e) => {
-          console.log(2)
-          console.log(e.message)
+
+
         })
     
 
@@ -93,7 +120,7 @@ const Dashboard = ({code}) => {
         type="search"
         placeholder="Search Songs/Artists"
         value={search}
-        onChange={e => setSearch(e.target.value)}
+        onChange={e => dispatch(searchAction(e.target.value))}
       />
       <div className="flex-grow-1 my-2" style={{ overflowY: "auto"}}>
         {searchResults.map(track => (

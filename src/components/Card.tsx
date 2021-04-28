@@ -1,7 +1,8 @@
 import React from 'react'
-import "../App.css"
-import { music } from "../store/action";
-import { useDispatch } from "react-redux";
+
+import { songAction } from "../store/action";
+import { useDispatch, useSelector } from "react-redux";
+import lists from "../musicList"
 
 type AppProps = {
   title: string,
@@ -9,20 +10,19 @@ type AppProps = {
   music: string
 }
 
-const Card: React.FunctionComponent<AppProps> = ({title, img, music: Musics}) => {
+const Card: React.FunctionComponent<AppProps> = ({title, img, music}) => {
 
   const dispatch = useDispatch()
+  const musicState = useSelector((state:stateFormat) => state.musicState)
   
     return (
-        <div className="container playhover">
-        <p></p>
-        <div className="card" style={{width : "400px"}} >
+        <div className="container playhover" style={{width : "200px", height: "200px", margin:"15px"}}>
+        <div className="card" >
         <img className="card-img-top" src={img} alt="Card images" />
-          <div className="card-body center">
-            {/* <h4 className="card-title"></h4> */}
-            <a href="#" className="btn btn-outline-success center-block stretched-link" onClick = {()=>dispatch(music(Musics))}>{title}</a>
-         
-          </div>
+          
+            <h5 className="card-title" style={{width : "150px", height: "40px",paddingBottom:"30px"}}>
+            <a href="#" className="stretched-link"  style={{width : "100px", height: "20px", fontSize: "14px"}} onClick = {()=>dispatch(songAction(music))}>{title}</a>
+            </h5>
         
         </div>
         </div>

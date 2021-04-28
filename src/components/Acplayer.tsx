@@ -5,25 +5,28 @@ import { useSelector, useDispatch } from "react-redux";
 import { play, duration, playing, mute } from "../store/action";
 import Slider from "./slider/Slider"
 
-const Acplayer: React.FC<musicProp> = ({ music }) => {
+const Acplayer: React.FC<musicProp> = ({ song }) => {
 
   const playerState = useSelector((state:stateFormat) => state.playerState);
   const durationState = useSelector((state:stateFormat) => state.duration);
   const dispatch = useDispatch();
   const playingTimeState = useSelector((state:stateFormat) => state.playingTime);
   const muteState = useSelector((state:stateFormat) => state.muted);
+  const albumurl = useSelector((state:stateFormat) => state.albumurl);
+ 
+
 
 const [percentage, setPercentage] = useState((playingTimeState / durationState) * 100)
   const audioRef = useRef<HTMLAudioElement>(null!);
 
   useEffect(() => {
-    if (music) {
+    if (song) {
       dispatch(play("PLAY", true));
       audioRef.current.play();
-      console.log(music)
+      console.log(song)
     }
     
-  }, [music, dispatch]);
+  }, [song, dispatch]);
 
   const handleOnClick = () => {
     if (playerState) {
@@ -72,6 +75,8 @@ const [percentage, setPercentage] = useState((playingTimeState / durationState) 
   return (
     <div className="container bgd">
       <div className="row border border-5 border-primary rounded">
+        <div className="col-1"><img src={albumurl}/></div>
+        
         <div className="col-1">
           <i
             className={playerState ? "bi bi-pause-circle" : "bi bi-play-circle"}
@@ -82,7 +87,7 @@ const [percentage, setPercentage] = useState((playingTimeState / durationState) 
           <div className="sticky">
             <audio
               ref={audioRef}
-              src={music}
+              src={song}
               
               onLoadedMetadata={(e: any) => {
                 const time = parseInt(e.target.duration)
@@ -102,11 +107,12 @@ const [percentage, setPercentage] = useState((playingTimeState / durationState) 
           </div>
         </div>
         <div className="col-1">
+
           <div>
             {formattedTime}/{formattedDuration}
           </div>
         </div>
-        <div className="col-9">
+        <div className="col-8">
           {/* <div className="progressBar">
             <ProgressBar
               striped
@@ -116,8 +122,8 @@ const [percentage, setPercentage] = useState((playingTimeState / durationState) 
 
           </div> */}
           <Slider percentage={percentage} onChange = {onChange}/>
-        </div>
-        <div className="col-1">
+            </div>
+            <div className="col-1">
           <i
             className={
               muteState == false
@@ -129,6 +135,7 @@ const [percentage, setPercentage] = useState((playingTimeState / durationState) 
             }}
           ></i>
         </div>
+        
       </div>
     </div>
   );

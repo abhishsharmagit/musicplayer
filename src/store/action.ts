@@ -21,7 +21,7 @@ export function play(type: String, arg?:any): Action{
 export function music(exp?:any):Action{
 
   return {
-    type: "CHANGE_MUSIC",
+    type: "RANDOM_MUSIC",
     payload: exp,
   };
 }
@@ -46,6 +46,46 @@ export function mute(arg?:any):Action {
 
   return {
     type: "MUTE",
+    payload: arg
+  };
+}
+
+export function searchAction(arg?:any):Action {
+
+  return {
+    type: "SEARCH",
+    payload: arg
+  };
+}
+
+export function searchResultsAction(arg?:any):Action {
+
+  return {
+    type: "SEARCH_RESULT",
+    payload: arg
+  };
+}
+
+export function albumUrlAction(arg?:any):Action {
+
+  return {
+    type: "ALBUM_URL",
+    payload: arg
+  };
+}
+
+export function titleAction(arg?:any):Action {
+
+  return {
+    type: "TITLE",
+    payload: arg
+  };
+}
+
+export function songAction(arg?:any):Action {
+
+  return {
+    type: "SONG_CHANGE",
     payload: arg
   };
 }
