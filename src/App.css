@@ -19,9 +19,9 @@
   justify-content: center;
   align-items: center;
   }
-  .bord {
+  /* .bord {
     border-width: 10px;
-  }
+  } */
   .bgd{
     background-color: grey;
   }
