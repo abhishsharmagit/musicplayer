@@ -26,7 +26,7 @@ const Player = () => {
   return (
     <div className="container-fluid">
       <div className="row justify-content-md-center">
-        <h1 className="text-center">Music Player</h1>
+      <h1 className="text-center">Music Player</h1>
       </div>
      
       <div className="row">

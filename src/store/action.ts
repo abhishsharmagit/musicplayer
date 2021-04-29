@@ -89,3 +89,27 @@ export function songAction(arg?:any):Action {
     payload: arg
   };
 }
+
+export function accessTokenAction(arg?:any):Action {
+
+  return {
+    type: "ACCESS_TOKEN",
+    payload: arg
+  };
+}
+
+export function refreshTokenAction(arg?:any):Action {
+
+  return {
+    type: "REFRESH_TOKEN",
+    payload: arg
+  };
+}
+
+export function expiresInAction(arg?:any):Action {
+
+  return {
+    type: "EXPIRES_IN",
+    payload: arg
+  };
+}

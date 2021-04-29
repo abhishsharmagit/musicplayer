@@ -8,7 +8,10 @@ type stateFormat = {
     searchResults: string|object[],
     albumurl: string,
     title: string,
-    song: string
+    song: string,
+    accessToken: string,
+    refreshToken: string,
+    expiresIn: string|number
   }
 
 
@@ -27,3 +30,14 @@ type Action = {
     code: string|null
 }
 
+type TrackProps = {
+  track:{
+    artist: string,
+    title: string,
+    uri: string,
+    albumUrl: string
+  },
+  chooseTrack:Function
+}
+
+type useAuthProp = (code:string) => string

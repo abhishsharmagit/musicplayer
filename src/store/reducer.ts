@@ -9,7 +9,10 @@ const initialState: stateFormat = {
   searchResults: [],
   albumurl: "",
   title: "",
-  song: ""
+  song: "",
+  accessToken: "",
+  refreshToken: "",
+  expiresIn: 0
 };
 
 const reducer = (state = initialState, action:Action) => {
@@ -69,6 +72,21 @@ const reducer = (state = initialState, action:Action) => {
           return {
             ...state,
             song: action.payload,
+          };
+          case "ACCESS_TOKEN":
+          return {
+            ...state,
+            accessToken: action.payload,
+          };
+          case "REFRESH_TOKEN":
+          return {
+            ...state,
+            refreshToken: action.payload,
+          };
+          case "EXPIRES_IN":
+          return {
+            ...state,
+            expiresIn: action.payload,
           };
     default:
       return state;
