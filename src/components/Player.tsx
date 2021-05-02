@@ -12,14 +12,37 @@ import lists from "../musicList"
 
 const Player = () => {
 
-   //const accessToken = useAuth(code)
-
 
   const dispatch = useDispatch()
   const musicState = useSelector((state:stateFormat) => state.musicState);
   const song = useSelector((state:stateFormat) => state.song);
 
-
+  useEffect(()=>{
+    
+    setTimeout(()=>{
+      axios.get("http://localhost:3001/newsongs")
+    .then((res)=>{
+      console.log(res)
+      dispatch(music( 
+        //@ts-ignore
+      res.data.tracks.items.map(track =>{
+  
+       
+        return {
+         
+           artist: track.artists[0].name,
+            title: track.name,
+            uri: track.preview_url,
+            cardimg: track.album.images[1].url
+        }
+        
+      })
+      ))
+    }).catch((e)=>{
+      console.log(e.message)
+    })
+    }, 2000)
+  }, [])
  
 
 

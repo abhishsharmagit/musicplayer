@@ -1,9 +1,4 @@
 
-// type Action = {
-//   type: String,
-//   arg?: any 
-// }
-
 
 export function play(type: String, arg?:any): Action{
   return {

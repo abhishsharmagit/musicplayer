@@ -17,8 +17,6 @@ const Slider: React.FC<Prop> = ({ percentage = 0, onChange }) => {
     
   }, [percentage])
 
- //const pos = inputRef.current.value = 0
-
   return (
     <div className='slider-container'>
 
@@ -33,7 +31,6 @@ const Slider: React.FC<Prop> = ({ percentage = 0, onChange }) => {
       ></div>
       <input
         type='range'
-        //ref = {inputRef}
         
         value={position}
       

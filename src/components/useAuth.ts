@@ -4,18 +4,11 @@ import {music, accessTokenAction, refreshTokenAction, expiresInAction} from "../
 import {useDispatch, useSelector} from "react-redux"
 
 const useAuth = (code:string) => {
-  // const [accessToken, setAccessToken] = useState()
-  // const [refreshToken, setRefreshToken] = useState()
-  // const [expiresIn, setExpiresIn] = useState()
 
   const accessToken = useSelector((state:stateFormat)=> state.accessToken)
   const refreshToken = useSelector((state:stateFormat)=> state.refreshToken)
   const expiresIn = useSelector((state:stateFormat)=> state.expiresIn)
 
-
-
-  const grant_type = "authorization_code"
-  const redirect_uri = "http://localhost:3000"
 
   const dispatch = useDispatch();
   
@@ -36,32 +29,31 @@ const useAuth = (code:string) => {
         //window.location = "/"
         console.log(e.message)
       })
+
   }, [code])
 
 
-  useEffect(()=>{
-    axios.get("http://localhost:3001/newsongs")
-    .then((res)=>{
-      console.log(res)
-      dispatch(music( 
-        //@ts-ignore
-      res.data.tracks.items.map(track =>{
-  
-       
-        return {
-         
-           artist: track.artists[0].name,
-            title: track.name,
-            uri: track.preview_url,
-            cardimg: track.album.images[1].url
-        }
+   useEffect(() => {
+
+    setTimeout(()=>{
+      
+      axios.post("http://localhost:3001/refresh")
+      .then(res => {
         
+        dispatch(accessTokenAction(res.data.accessToken))
+        dispatch(expiresInAction(res.data.expiresIn))
+        //@ts-ignore
+        window.history.pushState({}, null, "/")
       })
-      ))
-    }).catch((e)=>{
-      console.log(e.message)
-    })
-   },[])
+      .catch((e) => {
+        //window.location = "/"
+        console.log(e.message)
+      })
+      //@ts-ignore
+    }, (expiresIn*1000 - 60*1000))
+    
+
+  }, [])
 
 
   return accessToken

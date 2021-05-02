@@ -13,10 +13,7 @@ import axios from "axios"
 const Dashboard: React.FC<PlayerProps> = ({code}) => {
   //@ts-ignore
   const accessToken = useAuth(code);
-  console.log(accessToken)
-  // const [search, setSearch] = useState("")
-  // const [searchResults, setSearchResults] = useState([])
- // const [playingTrack, setPlayingTrack] = useState()
+
   const dispatch = useDispatch();
   
   const search = useSelector((state:stateFormat) => state.search)
@@ -24,10 +21,6 @@ const Dashboard: React.FC<PlayerProps> = ({code}) => {
   const title = useSelector((state:stateFormat) => state.title)
 
 
-
-
-
- // console.log(playingTrack)
   function chooseTrack(track:any) {
     dispatch(songAction(track.uri))
     dispatch(albumUrlAction(track.albumUrl))
@@ -36,12 +29,6 @@ const Dashboard: React.FC<PlayerProps> = ({code}) => {
     dispatch(searchResultsAction([]))
     
   }
-
-  // useEffect(() => {
-  //   if (!accessToken) return
-  //   spotifyApi.setAccessToken(accessToken)
-  // }, [accessToken])
-
 
   //@ts-ignore
   useEffect(() => {
@@ -107,11 +94,6 @@ const Dashboard: React.FC<PlayerProps> = ({code}) => {
             chooseTrack={chooseTrack}
           />
         ))}
-        {/* {searchResults.length === 0 && (
-          <div className="text-center" style={{ whiteSpace: "pre" }}>
-            {lyrics}
-          </div>
-        )} */}
       </div>
       <Player />
     </div>
